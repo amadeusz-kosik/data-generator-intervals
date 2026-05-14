@@ -69,7 +69,7 @@ object DataSuites {
       .select(
         F.explode(F.lit(groups(groupsCount))).as("key"),
         (F.lit(10) * F.col("index")).as("from"),
-        (F.lit(10) * F.col("index") + F.lit(4)).as("to")
+        (F.lit(10) * F.col("index")).as("to")
       )
 
   def queryDense(rowsCount: Long, groupsCount: Int)(implicit sparkSession: SparkSession): DataFrame =
@@ -91,6 +91,28 @@ object DataSuites {
         (F.lit(10) * F.col("index") - F.lit(10)).as("from"),
         (F.lit(10) * F.col("index") + F.lit(19)).as("to")
       )
+
+  def querySkewedDense(rowsCount: Long, groupsCount: Int)(implicit sparkSession: SparkSession): DataFrame = {
+    sparkSession
+      .range(rowsCount)
+      .toDF("index")
+      .select(
+        F.lit("CH-0").as("key"),
+        (F.col("index") - F.lit(20)).as("from"),
+        (F.col("index") + F.lit(20)).as("to")
+      )
+  }
+
+  def queryDummy(rowsCount: Long, groupsCount: Int)(implicit sparkSession: SparkSession): DataFrame =
+    sparkSession
+      .range(rowsCount / (groupsCount * 4))
+      .toDF("index")
+      .select(
+        F.explode(F.lit(groups(groupsCount * 4))).as("key"),
+        (F.lit(10) * F.col("index")).as("from"),
+        (F.lit(10) * F.col("index") + F.lit(9)).as("to")
+      )
+
 
   private def groups(groupsCount: Int) =
     (0 until groupsCount).toArray.map(index => f"CH-$index")

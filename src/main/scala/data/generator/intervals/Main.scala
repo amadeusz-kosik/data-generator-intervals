@@ -21,7 +21,9 @@ object Main extends App {
     "databaseSkewedFlat"          -> DataSuites.databaseSkewedFlat,
     "databaseSkewedStacked"       -> DataSuites.databaseSkewedStacked,
     "querySparse"                 -> DataSuites.querySparse,
-    "queryDense"                  -> DataSuites.queryDense
+    "queryDense"                  -> DataSuites.queryDense,
+    "querySkewedDense"            -> DataSuites.querySkewedDense,
+    "queryDummy"                  -> DataSuites.queryDummy
   ) foreach { case (name, callback) =>
     callback(DatabaseRowsCount, DatabaseGroupsCount)
       .repartition(TargetPartitionsCount)
