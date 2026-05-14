@@ -9,7 +9,7 @@ val mainClassFullName = "data.generator.intervals.Main"
 lazy val root = (project in file("."))
   .settings(
     name := "data-generator-intervals",
-    version := "1.0.1"
+    version := "1.0.2"
   )
 
 
@@ -31,7 +31,7 @@ docker / dockerfile := {
   val jar = (Compile / packageBin).value
 
   new Dockerfile {
-    from(s"spark:${SparkVersion}-scala2.13-java21-ubuntu")
+    from(s"spark:$SparkVersion-scala2.13-java21-ubuntu")
 
     copy(jar, s"/app/$outputJarFileName")
 
