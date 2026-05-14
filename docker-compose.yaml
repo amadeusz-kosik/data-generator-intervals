@@ -58,7 +58,7 @@ services:
       - spark-job-data:/mnt/data/
 
   spark-driver:
-    image: me.kosik/data-generator-intervals:latest
+    image: me.kosik/data-generator-intervals:1.0.3
     environment:
       - SPARK_NO_DAEMONIZE=true
       - SPARK_MODE=worker
