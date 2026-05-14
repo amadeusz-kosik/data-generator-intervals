@@ -62,7 +62,7 @@ object DataSuites {
       )
   }
 
-  def querySparse(rowsCount: Long, groupsCount: Int)(implicit sparkSession: SparkSession) =
+  def querySparse(rowsCount: Long, groupsCount: Int)(implicit sparkSession: SparkSession): DataFrame =
     sparkSession
       .range(rowsCount / groupsCount)
       .toDF("index")
@@ -72,7 +72,7 @@ object DataSuites {
         (F.lit(10) * F.col("index") + F.lit(4)).as("to")
       )
 
-  def queryDense(rowsCount: Long, groupsCount: Int)(implicit sparkSession: SparkSession) =
+  def queryDense(rowsCount: Long, groupsCount: Int)(implicit sparkSession: SparkSession): DataFrame =
     sparkSession
       .range(rowsCount / groupsCount)
       .toDF("index")
@@ -82,7 +82,7 @@ object DataSuites {
         (F.lit(10) * F.col("index") + F.lit(9)).as("to")
       )
 
-  def queryStacked(rowsCount: Long, groupsCount: Int)(implicit sparkSession: SparkSession) =
+  def queryStacked(rowsCount: Long, groupsCount: Int)(implicit sparkSession: SparkSession): DataFrame =
     sparkSession
       .range(rowsCount / groupsCount)
       .toDF("index")
