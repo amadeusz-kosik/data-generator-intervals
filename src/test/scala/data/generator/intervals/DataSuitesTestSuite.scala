@@ -136,16 +136,16 @@ class DataSuitesTestSuite extends AnyFunSpec with WithDataFrameAssertions {
       val generatedDataSample = DataSuites.querySparse(TestDataSize, TestDataGroupsCount)
 
       val expectedData = List(
-        DataSuiteTestRow("CH-0",  0,  4),
-        DataSuiteTestRow("CH-0", 10, 14),
-        DataSuiteTestRow("CH-0", 20, 24),
-        DataSuiteTestRow("CH-0", 30, 34),
-        DataSuiteTestRow("CH-0", 40, 44),
-        DataSuiteTestRow("CH-1",  0,  4),
-        DataSuiteTestRow("CH-1", 10, 14),
-        DataSuiteTestRow("CH-1", 20, 24),
-        DataSuiteTestRow("CH-1", 30, 34),
-        DataSuiteTestRow("CH-1", 40, 44)
+        DataSuiteTestRow("CH-0",  0,  0),
+        DataSuiteTestRow("CH-0", 10, 10),
+        DataSuiteTestRow("CH-0", 20, 20),
+        DataSuiteTestRow("CH-0", 30, 30),
+        DataSuiteTestRow("CH-0", 40, 40),
+        DataSuiteTestRow("CH-1",  0,  0),
+        DataSuiteTestRow("CH-1", 10, 10),
+        DataSuiteTestRow("CH-1", 20, 20),
+        DataSuiteTestRow("CH-1", 30, 30),
+        DataSuiteTestRow("CH-1", 40, 40)
       ).toDF()
 
       assertDataFramesEqual(expectedData, generatedDataSample)
@@ -194,6 +194,52 @@ class DataSuitesTestSuite extends AnyFunSpec with WithDataFrameAssertions {
         DataSuiteTestRow("CH-1",  10, 39),
         DataSuiteTestRow("CH-1",  20, 49),
         DataSuiteTestRow("CH-1",  30, 59)
+      ).toDF()
+
+      assertDataFramesEqual(expectedData, generatedDataSample)
+    }
+  }
+
+  describe("DataSuites.querySkewedDense") {
+    it("should generate skewed set of overlapping intervals") {
+      implicit val _sparkSession: SparkSession = sparkSession
+      import _sparkSession.implicits._
+
+      val generatedDataSample = DataSuites.querySkewedDense(TestDataSize, TestDataGroupsCount)
+
+      val expectedData = List(
+        DataSuiteTestRow("CH-0", -20, 20),
+        DataSuiteTestRow("CH-0", -19, 21),
+        DataSuiteTestRow("CH-0", -18, 22),
+        DataSuiteTestRow("CH-0", -17, 23),
+        DataSuiteTestRow("CH-0", -16, 24),
+        DataSuiteTestRow("CH-0", -15, 25),
+        DataSuiteTestRow("CH-0", -14, 26),
+        DataSuiteTestRow("CH-0", -13, 27),
+        DataSuiteTestRow("CH-0", -12, 28),
+        DataSuiteTestRow("CH-0", -11, 29)
+      ).toDF()
+
+      assertDataFramesEqual(expectedData, generatedDataSample)
+    }
+  }
+
+  describe("DataSuites.queryDummy") {
+    it("should generate uniform set of non-overlapping intervals, but half of them does not match by group") {
+      implicit val _sparkSession: SparkSession = sparkSession
+      import _sparkSession.implicits._
+
+      val generatedDataSample = DataSuites.queryDummy(TestDataSize, TestDataGroupsCount)
+
+      val expectedData = List(
+        DataSuiteTestRow("CH-0", 0, 9),
+        DataSuiteTestRow("CH-1", 0, 9),
+        DataSuiteTestRow("CH-2", 0, 9),
+        DataSuiteTestRow("CH-3", 0, 9),
+        DataSuiteTestRow("CH-4", 0, 9),
+        DataSuiteTestRow("CH-5", 0, 9),
+        DataSuiteTestRow("CH-6", 0, 9),
+        DataSuiteTestRow("CH-7", 0, 9)
       ).toDF()
 
       assertDataFramesEqual(expectedData, generatedDataSample)

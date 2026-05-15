@@ -97,7 +97,7 @@ object DataSuites {
       .range(rowsCount)
       .toDF("index")
       .select(
-        F.lit("CH-0").as("key"),
+        F.explode(F.lit(groups(1))).as("key"),
         (F.col("index") - F.lit(20)).as("from"),
         (F.col("index") + F.lit(20)).as("to")
       )
