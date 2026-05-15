@@ -42,7 +42,6 @@ object DataSuites {
     sparkSession
       .range(rowsCount)
       .toDF("index")
-      .withColumn("_rand", F.rand(42))
       .select(
         skewedGroupCol(groupsCount).as("key"),
         F.col("index").as("from"),
@@ -54,7 +53,6 @@ object DataSuites {
     sparkSession
       .range(rowsCount)
       .toDF("index")
-      .withColumn("_rand", F.rand(42))
       .select(
         skewedGroupCol(groupsCount).as("key"),
         (F.col("index") - F.lit(20)).as("from"),
@@ -117,9 +115,7 @@ object DataSuites {
   private def groups(groupsCount: Int) =
     (0 until groupsCount).toArray.map(index => f"CH-$index")
 
-  private def skewedGroupCol(groupsCount: Int) = F
-    .when(F.col("_rand") > F.lit(0.5), "CH-0")
-    .otherwise(F.concat(F.lit("CH-"),
-      F.ceil(F.col("_rand") * F.lit(2) * F.lit(groupsCount - 1)).cast(DataTypes.IntegerType))
-    )
+  private def skewedGroupCol(groupsCount: Int) =
+    F.when((F.col("index") % F.lit(groupsCount * 2)) > F.lit(groupsCount), "CH-0")
+    .otherwise(F.concat(F.lit("CH-"), (F.col("index") % F.lit(groupsCount)).cast(DataTypes.IntegerType)))
 }
