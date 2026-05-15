@@ -10,7 +10,7 @@ lazy val root = (project in file("."))
   .settings(
     name := "data-generator-intervals",
     organization := "me.kosik",
-    version := "1.0.3"
+    version := "1.0.4"
   )
 
 
